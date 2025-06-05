@@ -64,7 +64,7 @@ export default function MovieCard({
         />
       </div>
       <div className="flex flex-col items-center justify-center w-full">
-        <h2 className="text-lg md:text-2xl text-nowrap max-w-[150px] md:max-w-[190px] font-semibold overflow-hidden text-ellipsis">
+        <h2 className="text-lg md:text-2xl text-nowrap max-w-[150px] tracking-tight md:max-w-[140px] lg:max-w-[190px]  font-semibold overflow-hidden text-ellipsis">
           {movieData.Title}{" "}
         </h2>
         <p className="text-sm md:text-[16px]">{movieData.Released} </p>

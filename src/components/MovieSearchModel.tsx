@@ -138,7 +138,7 @@ export default function MovieSearchModel({ title }: { title: string }) {
           {pageNum.total} results found
         </div>
       )}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 items-center justify-between">
+      <div className="grid grid-cols-2 px-0 sm:px-12 md:px-0 md:grid-cols-4 gap-4 items-center justify-between">
         {movieData ? (
           movieData.map((eh: movieType) => {
             return (

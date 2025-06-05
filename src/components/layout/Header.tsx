@@ -3,7 +3,7 @@ import Searchbar from "./Searchbar";
 import { BsFillBookmarkHeartFill } from "react-icons/bs";
 
 export default function Header() {
-  const location = useLocation();
+  const location = useLocation();//to get current route path
   return (
     <div className=" flex items-center px-4 justify-between text-lg py-4">
       <div>
