@@ -15,14 +15,13 @@ export default function SingleMovie() {
 
   const { isFavourite } = useContext(MovieContext);
   useEffect(() => {
-    if(!id) return
+    if (!id) return;
     const rawdata = localStorage.getItem("fav");
     const favdata = rawdata ? JSON.parse(rawdata) : [];
     const test = favdata.some((eh: movieType) => eh.imdbID === id);
     setActive(test);
-  }, [id,isFavourite]);
+  }, [id, isFavourite]);
   useEffect(() => {
-    console.log("id", id);
     if (!id) {
       return setError("movie doesnt exist");
     }
@@ -57,7 +56,7 @@ export default function SingleMovie() {
   if (!movieData) return <NotFound error={error} />;
   console.log("movie data", movieData);
   return (
-    <div className="flex gap-4">
+    <div className="flex flex-col items-center sm:flex-row sm:items-start gap-4">
       <div>
         <MovieCard
           movieData={movieData}
@@ -65,16 +64,39 @@ export default function SingleMovie() {
         />
       </div>
       <div className="py-4">
-        <div className="flex flex-col gap-1 text-justify">
-        <h2>Title:{movieData?.Title} </h2>
-        <p>Actor:{movieData?.Actors} </p>
-        <p>Award:{movieData?.Awards} </p>
-        <p>Story:{movieData?.Plot} </p>
-        <p>Released:{movieData?.Released} </p>
-        <p>Writer:{movieData?.Writer} </p>
+        <div className="flex flex-col gap-1 text-justify tracking-tight">
+          <h2>
+            {" "}
+            <span className="text-lg font-semibold pr-1"> Title:</span>{" "}
+            {movieData?.Title}{" "}
+          </h2>
+          <p>
+            {" "}
+            <span className="text-lg font-semibold pr-1"> Actor:</span>{" "}
+            {movieData?.Actors}{" "}
+          </p>
+          <p>
+            {" "}
+            <span className="text-lg font-semibold pr-1"> Award:</span>{" "}
+            {movieData?.Awards}{" "}
+          </p>
+          <p>
+            {" "}
+            <span className="text-lg font-semibold pr-1"> Story:</span>{" "}
+            {movieData?.Plot}{" "}
+          </p>
+          <p>
+            {" "}
+            <span className="text-lg font-semibold pr-1"> Released:</span>{" "}
+            {movieData?.Released}{" "}
+          </p>
+          <p>
+            {" "}
+            <span className="text-lg font-semibold pr-1"> Writer:</span>{" "}
+            {movieData?.Writer}{" "}
+          </p>
+        </div>
       </div>
-      </div>
-      
     </div>
   );
 }

@@ -13,17 +13,17 @@ function App() {
   return (
     <BrowserRouter>
       <MovieContextProvider>
-          <Routes>
-            <Route  element={<Layout />}>
-              <Route path="/" element={<Homepage />} />
-              <Route path="movies">
-                <Route path=":title" element={<Movie />} />
-                <Route path="detail/:id" element={<SingleMovie />} />
-              </Route>
-              <Route path="favourite" element={<FavouriteList />} />
-              <Route path="*" element={<NotFound msg="page not found" />}/>
+        <Routes>
+          <Route element={<Layout />}>
+            <Route path="/" element={<Homepage />} />
+            <Route path="movies">
+              <Route path=":title" element={<Movie />} />
+              <Route path="detail/:id" element={<SingleMovie />} />
             </Route>
-          </Routes>
+            <Route path="favourite" element={<FavouriteList />} />
+            <Route path="*" element={<NotFound msg="page not found" />} />
+          </Route>
+        </Routes>
       </MovieContextProvider>
     </BrowserRouter>
   );
