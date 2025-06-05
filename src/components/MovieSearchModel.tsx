@@ -45,7 +45,7 @@ export default function MovieSearchModel({ title }: { title: string }) {
       try {
         setLoading(true);
         const res = await fetch(
-          `http://www.omdbapi.com/?s=${encodeURIComponent(
+          `https://www.omdbapi.com/?s=${encodeURIComponent(
             title
           )}&page=${pageNum}&apikey=${Apikey}`
         );
@@ -92,7 +92,7 @@ export default function MovieSearchModel({ title }: { title: string }) {
     try {
       setLoading(true);
       const res = await fetch(
-        `http://www.omdbapi.com/?s=${encodeURIComponent(title)}&page=${
+        `https://www.omdbapi.com/?s=${encodeURIComponent(title)}&page=${
           pageNum.num
         }&apikey=${Apikey}`
       );

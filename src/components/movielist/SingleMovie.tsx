@@ -29,7 +29,7 @@ export default function SingleMovie() {
       try {
         setLoading(true);
         const res = await fetch(
-          `http://www.omdbapi.com/?i=${id}&Season&apikey=${Apikey}`
+          `https://www.omdbapi.com/?i=${id}&Season&apikey=${Apikey}`
         );
         if (!res.ok) {
           setError("response not found");
