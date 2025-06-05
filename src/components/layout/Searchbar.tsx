@@ -6,7 +6,7 @@ export default function Searchbar() {
   const location= useLocation()
     const redirect= useNavigate()
   const handleSearch = async () => {
-        redirect(`/movies?title=${encodeURIComponent(search)}`)
+        redirect(`/movies/${search}`)
   };
   return (
     <div >

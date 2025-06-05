@@ -1,12 +1,12 @@
 import { useContext, useEffect, useState } from "react";
-import { useSearchParams } from "react-router";
 import MovieCard, { type movieType } from "./MovieCard";
 import NotFound from "../NotFound";
 import Loading from "../Loading";
 import { MovieContext } from "../moviecontext/MovieContext";
+import { useParams } from "react-router";
 
 export default function Movie() {
-  const [searchParams] = useSearchParams();
+ const{title}=useParams()
   const [movieData, setMovieData] = useState<movieType[]>();
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
@@ -39,7 +39,7 @@ export default function Movie() {
     setMovieData(updatedData);
   }, [isFavourite]);
   useEffect(() => {
-    const title = searchParams.get("search");
+    
     if (!title) return;
     const rawdata = localStorage.getItem("fav");
     const favdata = rawdata ? JSON.parse(rawdata) : [];
@@ -86,9 +86,8 @@ export default function Movie() {
       }
     };
     getMovieList();
-  }, [searchParams]);
+  }, [title]);
   const handleMov = async () => {
-    const title = searchParams.get("search");
     if (!title) return;
     const rawdata = localStorage.getItem("fav");
     const favdata = rawdata ? JSON.parse(rawdata) : [];

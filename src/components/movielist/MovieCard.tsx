@@ -44,7 +44,7 @@ export default function MovieCard({
   console.log("activefav", activeFav);
   console.log("moviefav", movieData.imdbID);
   return (
-    <div onClick={()=> redirect(`/movies/${movieData.imdbID}`)} className="w-full space-y-2 cursor-pointer max-w-[190px] lg:max-w-[280px] ">
+    <div onClick={()=> redirect(`/movies/detail/${movieData.imdbID}`)} className="w-full space-y-2 cursor-pointer max-w-[190px] lg:max-w-[280px] ">
       <div className="rounded-lg relative">
         <img
           className="object-cover rounded-xl w-[190px] lg:w-[280px] h-[240px] md:h-[290px] lg:h-[390px]"
