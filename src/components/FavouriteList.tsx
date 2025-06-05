@@ -10,7 +10,7 @@ export default function FavouriteList() {
     useEffect(()=> {  
     const data= localStorage.getItem("fav")
         setSaveData(data?JSON.parse(data):[])
-        console.log("fav effect running")
+        console.log("fav effect running",data?JSON.parse(data):[])
         
     },[isFavourite])
    

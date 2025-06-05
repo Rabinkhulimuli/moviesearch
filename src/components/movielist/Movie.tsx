@@ -1,8 +1,9 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useSearchParams } from "react-router";
 import MovieCard, { type movieType } from "./MovieCard";
 import NotFound from "../NotFound";
 import Loading from "../Loading";
+import { MovieContext } from "../moviecontext/MovieContext";
 
 export default function Movie() {
   const [searchParams] = useSearchParams();
@@ -10,12 +11,39 @@ export default function Movie() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [pageNum, setPageNum] = useState({ num: 1, total: 1 });
+  const{isFavourite}= useContext(MovieContext)
+   useEffect(()=> {
+    
+    console.log("movie data all updated movie data detail", movieData);
+    },[movieData])
+    useEffect(()=> {
+      handleMov()
+    },[pageNum.num])
+    //update favourite if isFavourite changes
+    useEffect(()=> {
+       const rawdata = localStorage.getItem("fav");
+    const favdata = rawdata ? JSON.parse(rawdata) : [];
+    if(!movieData) return
+    const updatedData = movieData.map((eh: movieType) => {
+            const check = favdata.some(
+              (eh1: movieType) => eh1.imdbID === eh.imdbID
+            );
+            return {
+              Title: eh.Title,
+              Released: eh.Year,
+              Poster: eh.Poster,
+              imdbID: eh.imdbID,
+              active: check,
+            };
+          });
+          console.log("updated raw set value ",updatedData)
+          setMovieData(updatedData);
+    },[isFavourite])
   useEffect(() => {
     const title = searchParams.get("search");
     if (!title) return;
     const rawdata = localStorage.getItem("fav");
     const favdata = rawdata ? JSON.parse(rawdata) : [];
-
     const getMovieList = async () => {
       try {
         setLoading(true);
@@ -41,15 +69,15 @@ export default function Movie() {
               Title: eh.Title,
               Released: eh.Year,
               Poster: eh.Poster,
-              imdbId: eh.imdbID,
+              imdbID: eh.imdbID,
               active: check,
             };
           });
+          console.log("updated raw set value ",updatedData)
           setMovieData(updatedData);
           setPageNum((prev) => ({ ...prev, total: data.totalResults }));
 
           console.log("movie data all detail", data);
-          console.log("movie data all updated movie data detail", movieData);
         }
         setLoading(false);
       } catch (err) {
@@ -83,13 +111,15 @@ export default function Movie() {
       } else if (data.Response === "True") {
         const updatedData = data.Search.map((eh: movieType) => {
           const check = favdata.some(
-            (eh1: movieType) => eh1.imdbID === eh.imdbID
+            (eh1: movieType) => {
+              console.log("eh1",eh1,"eh",eh)
+              return eh1.imdbID === eh.imdbID}
           );
           return {
             Title: eh.Title,
             Released: eh.Year,
             Poster: eh.Poster,
-            imdbId: eh.imdbID,
+            imdbID: eh.imdbID,
             active: check,
           };
         });
@@ -118,7 +148,7 @@ export default function Movie() {
             return (
               <div key={eh.imdbID}>
                 {" "}
-                <MovieCard movieData={eh} activeFav={`${eh.imdbID}`} />{" "}
+                <MovieCard movieData={eh} activeFav={`${eh.active?eh.imdbID:""}`} />{" "}
               </div>
             );
           })
@@ -133,20 +163,20 @@ export default function Movie() {
               ...prev,
               num: prev.num > 1 ? prev.num - 1 : 1,
             }));
-            handleMov();
+            
           }}
           disabled={pageNum.num == 1}
-          className="cursor-pointer bg-cyan-700 px-4 py-1 rounded-lg font-semibold capitalize transition-all ease-in-out duration-500 hover:bg-cyan-900"
+          className={`cursor-pointer bg-cyan-700 px-4 py-1 rounded-lg font-semibold capitalize transition-all ease-in-out duration-500  ${pageNum.num == 1?" brightness-50":"hover:bg-cyan-900"}`}
         >
           prev
         </button>
         <button
           onClick={() => {
             setPageNum((prev) => ({ ...prev, num: prev.num + 1 }));
-            handleMov();
+            
           }}
           disabled={pageNum.num == pageNum.total}
-          className="cursor-pointer bg-cyan-700 px-4 py-1 rounded-lg font-semibold capitalize transition-all ease-in-out duration-500 hover:bg-cyan-900"
+          className={`cursor-pointer bg-cyan-700 px-4 py-1 rounded-lg font-semibold capitalize transition-all ease-in-out duration-500 hover:bg-cyan-900  ${pageNum.num == Math.floor(pageNum.total/10)?" brightness-50":"hover:bg-cyan-900"}`}
         >
           Next
         </button>

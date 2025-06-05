@@ -1,5 +1,5 @@
 import { FaRegHeart } from "react-icons/fa6";
-import { useContext, useState } from "react";
+import { useContext} from "react";
 import { MovieContext } from "../moviecontext/MovieContext";
 export type movieType = {
   Title: string;
@@ -7,7 +7,7 @@ export type movieType = {
   Poster: string;
   imdbID: string;
   active?: boolean;
-  Year?:string
+  Year?: string;
 };
 export default function MovieCard({
   movieData,
@@ -17,7 +17,6 @@ export default function MovieCard({
   activeFav?: string;
 }) {
   const { isFavourite, setIsFavourite } = useContext(MovieContext);
-  const [active, setActive] = useState(movieData.active);
   const handleFavourite = (e: React.MouseEvent) => {
     e.stopPropagation();
     const rawData = localStorage.getItem("fav");
@@ -25,20 +24,21 @@ export default function MovieCard({
     const test = data.some((eh: movieType) => eh.imdbID === movieData.imdbID);
     if (!test) {
       data.push(movieData);
-      setActive(true);
+
       setIsFavourite(!isFavourite); //just to refresh localstorage
     } else {
       data = data.filter((eh: movieType) => eh.imdbID !== movieData.imdbID);
       setIsFavourite(!isFavourite);
-      setActive(false);
     }
     localStorage.setItem("fav", JSON.stringify(data));
     const rawDatas = localStorage.getItem("fav");
     const datas = rawDatas ? JSON.parse(rawDatas) : [];
     console.log("saved data  in storage", datas);
   };
+  console.log("activefav", activeFav);
+  console.log("moviefav", movieData.imdbID);
   return (
-    <div  className="w-full space-y-2 cursor-pointer max-w-[190px] lg:max-w-[280px] ">
+    <div className="w-full space-y-2 cursor-pointer max-w-[190px] lg:max-w-[280px] ">
       <div className="rounded-lg relative">
         <img
           className="object-cover rounded-xl w-[190px] lg:w-[280px] h-[240px] md:h-[290px] lg:h-[390px]"
@@ -48,7 +48,7 @@ export default function MovieCard({
         <FaRegHeart
           onClick={handleFavourite}
           className={`absolute top-2 right-2 transition-all ease-in-out duration-500 w-7 h-7 p-1 z-10 ${
-            activeFav === movieData.imdbID || active
+            activeFav && activeFav === movieData.imdbID
               ? "bg-yellow-300 text-black"
               : "bg-transparent backdrop-blur-md"
           } rounded-2xl`}
