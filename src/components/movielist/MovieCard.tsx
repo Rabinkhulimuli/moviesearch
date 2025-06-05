@@ -1,6 +1,7 @@
 import { FaRegHeart } from "react-icons/fa6";
 import { useContext} from "react";
 import { MovieContext } from "../moviecontext/MovieContext";
+import { useNavigate } from "react-router";
 export type movieType = {
   Title: string;
   Released?: string;
@@ -8,6 +9,10 @@ export type movieType = {
   imdbID: string;
   active?: boolean;
   Year?: string;
+  Plot?:string;
+  Writer?:string;
+  Awards?:string;
+  Actors?:string
 };
 export default function MovieCard({
   movieData,
@@ -17,6 +22,7 @@ export default function MovieCard({
   activeFav?: string;
 }) {
   const { isFavourite, setIsFavourite } = useContext(MovieContext);
+  const redirect=useNavigate()
   const handleFavourite = (e: React.MouseEvent) => {
     e.stopPropagation();
     const rawData = localStorage.getItem("fav");
@@ -38,7 +44,7 @@ export default function MovieCard({
   console.log("activefav", activeFav);
   console.log("moviefav", movieData.imdbID);
   return (
-    <div className="w-full space-y-2 cursor-pointer max-w-[190px] lg:max-w-[280px] ">
+    <div onClick={()=> redirect(`/movies/${movieData.imdbID}`)} className="w-full space-y-2 cursor-pointer max-w-[190px] lg:max-w-[280px] ">
       <div className="rounded-lg relative">
         <img
           className="object-cover rounded-xl w-[190px] lg:w-[280px] h-[240px] md:h-[290px] lg:h-[390px]"

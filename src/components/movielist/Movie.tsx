@@ -11,34 +11,33 @@ export default function Movie() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [pageNum, setPageNum] = useState({ num: 1, total: 1 });
-  const{isFavourite}= useContext(MovieContext)
-   useEffect(()=> {
-    
+  const Apikey = import.meta.env.VITE_APIKEY;
+  console.log(Apikey);
+  const { isFavourite } = useContext(MovieContext);
+  useEffect(() => {
     console.log("movie data all updated movie data detail", movieData);
-    },[movieData])
-    useEffect(()=> {
-      handleMov()
-    },[pageNum.num])
-    //update favourite if isFavourite changes
-    useEffect(()=> {
-       const rawdata = localStorage.getItem("fav");
+  }, [movieData]);
+  useEffect(() => {
+    handleMov();
+  }, [pageNum.num]);
+  //update favourite if isFavourite changes
+  useEffect(() => {
+    const rawdata = localStorage.getItem("fav");
     const favdata = rawdata ? JSON.parse(rawdata) : [];
-    if(!movieData) return
+    if (!movieData) return;
     const updatedData = movieData.map((eh: movieType) => {
-            const check = favdata.some(
-              (eh1: movieType) => eh1.imdbID === eh.imdbID
-            );
-            return {
-              Title: eh.Title,
-              Released: eh.Year,
-              Poster: eh.Poster,
-              imdbID: eh.imdbID,
-              active: check,
-            };
-          });
-          console.log("updated raw set value ",updatedData)
-          setMovieData(updatedData);
-    },[isFavourite])
+      const check = favdata.some((eh1: movieType) => eh1.imdbID === eh.imdbID);
+      return {
+        Title: eh.Title,
+        Released: eh.Year,
+        Poster: eh.Poster,
+        imdbID: eh.imdbID,
+        active: check,
+      };
+    });
+    console.log("updated raw set value ", updatedData);
+    setMovieData(updatedData);
+  }, [isFavourite]);
   useEffect(() => {
     const title = searchParams.get("search");
     if (!title) return;
@@ -50,7 +49,7 @@ export default function Movie() {
         const res = await fetch(
           `http://www.omdbapi.com/?s=${encodeURIComponent(
             title
-          )}&page=${pageNum}&apikey=e6d48a5`
+          )}&page=${pageNum}&apikey=${Apikey}`
         );
         if (!res.ok) {
           console.log("response of image is not okay");
@@ -73,7 +72,7 @@ export default function Movie() {
               active: check,
             };
           });
-          console.log("updated raw set value ",updatedData)
+          console.log("updated raw set value ", updatedData);
           setMovieData(updatedData);
           setPageNum((prev) => ({ ...prev, total: data.totalResults }));
 
@@ -96,9 +95,9 @@ export default function Movie() {
     try {
       setLoading(true);
       const res = await fetch(
-        `http://www.omdbapi.com/?s=${encodeURIComponent(
-          title
-        )}&page=${pageNum.num}&apikey=e6d48a5`
+        `http://www.omdbapi.com/?s=${encodeURIComponent(title)}&page=${
+          pageNum.num
+        }&apikey=${Apikey}`
       );
       if (!res.ok) {
         console.log("response of image is not okay");
@@ -110,11 +109,10 @@ export default function Movie() {
         setError(data.Error);
       } else if (data.Response === "True") {
         const updatedData = data.Search.map((eh: movieType) => {
-          const check = favdata.some(
-            (eh1: movieType) => {
-              console.log("eh1",eh1,"eh",eh)
-              return eh1.imdbID === eh.imdbID}
-          );
+          const check = favdata.some((eh1: movieType) => {
+            
+            return eh1.imdbID === eh.imdbID;
+          });
           return {
             Title: eh.Title,
             Released: eh.Year,
@@ -148,7 +146,10 @@ export default function Movie() {
             return (
               <div key={eh.imdbID}>
                 {" "}
-                <MovieCard movieData={eh} activeFav={`${eh.active?eh.imdbID:""}`} />{" "}
+                <MovieCard
+                  movieData={eh}
+                  activeFav={`${eh.active ? eh.imdbID : ""}`}
+                />{" "}
               </div>
             );
           })
@@ -163,20 +164,24 @@ export default function Movie() {
               ...prev,
               num: prev.num > 1 ? prev.num - 1 : 1,
             }));
-            
           }}
           disabled={pageNum.num == 1}
-          className={`cursor-pointer bg-cyan-700 px-4 py-1 rounded-lg font-semibold capitalize transition-all ease-in-out duration-500  ${pageNum.num == 1?" brightness-50":"hover:bg-cyan-900"}`}
+          className={`cursor-pointer bg-cyan-700 px-4 py-1 rounded-lg font-semibold capitalize transition-all ease-in-out duration-500  ${
+            pageNum.num == 1 ? " brightness-50" : "hover:bg-cyan-900"
+          }`}
         >
           prev
         </button>
         <button
           onClick={() => {
             setPageNum((prev) => ({ ...prev, num: prev.num + 1 }));
-            
           }}
           disabled={pageNum.num == pageNum.total}
-          className={`cursor-pointer bg-cyan-700 px-4 py-1 rounded-lg font-semibold capitalize transition-all ease-in-out duration-500 hover:bg-cyan-900  ${pageNum.num == Math.floor(pageNum.total/10)?" brightness-50":"hover:bg-cyan-900"}`}
+          className={`cursor-pointer bg-cyan-700 px-4 py-1 rounded-lg font-semibold capitalize transition-all ease-in-out duration-500 hover:bg-cyan-900  ${
+            pageNum.num == Math.floor(pageNum.total / 10)
+              ? " brightness-50"
+              : "hover:bg-cyan-900"
+          }`}
         >
           Next
         </button>
