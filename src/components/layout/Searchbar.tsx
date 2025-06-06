@@ -7,6 +7,7 @@ export default function Searchbar() {
   const redirect = useNavigate();
   const handleSearch = async () => {
     redirect(`/movies/${search}`);
+    
   };
   return (
     <div>

@@ -7,7 +7,7 @@ function Homepage() {
   const [search, setSearch] = useState("");
   const redirect = useNavigate();
   const handleSearch = async () => {
-    redirect(`/movies?title=${encodeURIComponent(search)}`);
+    redirect(`/movies/${search}`);
   };
   return (
     <div>

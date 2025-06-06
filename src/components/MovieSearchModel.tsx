@@ -104,6 +104,7 @@ export default function MovieSearchModel({ title }: { title: string }) {
       console.log("search data full ", data);
       if (data.Response === "False") {
         setError(data.Error);
+        return <NotFound error={data.Error} />;
       } else if (data.Response === "True") {
         const updatedData = data.Search.map((eh: movieType) => {
           const check = favdata.some((eh1: movieType) => {
@@ -133,57 +134,59 @@ export default function MovieSearchModel({ title }: { title: string }) {
   if (loading) return <Loading />;
   return (
     <div>
-      {location.pathname !== "/" && (
-        <div className="flex items-center justify-center py-10 bg-amber-900">
-          {pageNum.total} results found
+      {movieData ? (
+        <div>
+          {location.pathname !== "/" && (
+            <div className="flex items-center justify-center py-10 bg-amber-900">
+              {pageNum.total} results found
+            </div>
+          )}
+          <div className="grid grid-cols-2 px-0 sm:px-12 md:px-0 md:grid-cols-4 gap-4 items-center justify-between">
+            {movieData.map((eh: movieType) => {
+              return (
+                <div key={eh.imdbID}>
+                  {" "}
+                  <MovieCard
+                    movieData={eh}
+                    activeFav={`${eh.active ? eh.imdbID : ""}`}
+                  />{" "}
+                </div>
+              );
+            })}
+          </div>
+          <div className="flex gap-4 items-center justify-center my-10 pb-10">
+            <button
+              onClick={() => {
+                setPageNum((prev) => ({
+                  ...prev,
+                  num: prev.num > 1 ? prev.num - 1 : 1,
+                }));
+              }}
+              disabled={pageNum.num == 1}
+              className={`cursor-pointer bg-cyan-700 px-4 py-1 rounded-lg font-semibold capitalize transition-all ease-in-out duration-500  ${
+                pageNum.num == 1 ? " brightness-50" : "hover:bg-cyan-900"
+              }`}
+            >
+              prev
+            </button>
+            <button
+              onClick={() => {
+                setPageNum((prev) => ({ ...prev, num: prev.num + 1 }));
+              }}
+              disabled={pageNum.num == pageNum.total}
+              className={`cursor-pointer bg-cyan-700 px-4 py-1 rounded-lg font-semibold capitalize transition-all ease-in-out duration-500 hover:bg-cyan-900  ${
+                pageNum.num == Math.floor(pageNum.total / 10)
+                  ? " brightness-50"
+                  : "hover:bg-cyan-900"
+              }`}
+            >
+              Next
+            </button>
+          </div>
         </div>
+      ) : (
+        <NotFound error={error} msg="Search not found" />
       )}
-      <div className="grid grid-cols-2 px-0 sm:px-12 md:px-0 md:grid-cols-4 gap-4 items-center justify-between">
-        {movieData ? (
-          movieData.map((eh: movieType) => {
-            return (
-              <div key={eh.imdbID}>
-                {" "}
-                <MovieCard
-                  movieData={eh}
-                  activeFav={`${eh.active ? eh.imdbID : ""}`}
-                />{" "}
-              </div>
-            );
-          })
-        ) : (
-          <NotFound error={error} msg="Search not found" />
-        )}
-      </div>
-      <div className="flex gap-4 items-center justify-center my-10 pb-10">
-        <button
-          onClick={() => {
-            setPageNum((prev) => ({
-              ...prev,
-              num: prev.num > 1 ? prev.num - 1 : 1,
-            }));
-          }}
-          disabled={pageNum.num == 1}
-          className={`cursor-pointer bg-cyan-700 px-4 py-1 rounded-lg font-semibold capitalize transition-all ease-in-out duration-500  ${
-            pageNum.num == 1 ? " brightness-50" : "hover:bg-cyan-900"
-          }`}
-        >
-          prev
-        </button>
-        <button
-          onClick={() => {
-            setPageNum((prev) => ({ ...prev, num: prev.num + 1 }));
-          }}
-          disabled={pageNum.num == pageNum.total}
-          className={`cursor-pointer bg-cyan-700 px-4 py-1 rounded-lg font-semibold capitalize transition-all ease-in-out duration-500 hover:bg-cyan-900  ${
-            pageNum.num == Math.floor(pageNum.total / 10)
-              ? " brightness-50"
-              : "hover:bg-cyan-900"
-          }`}
-        >
-          Next
-        </button>
-      </div>
     </div>
   );
 }
